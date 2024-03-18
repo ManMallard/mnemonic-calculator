@@ -15,6 +15,7 @@ DATABASE = r'database/11_13_2022/'
 
 def generate_random_mnemonic(num_words=24, language='english'):
     """Generate a random mnemonic phrase."""
+    BIP39 = hdwallet.BIP39
     if language not in BIP39.LANGUAGES:
         raise ValueError("Invalid language. Supported languages are: " + ', '.join(BIP39.LANGUAGES))
     
