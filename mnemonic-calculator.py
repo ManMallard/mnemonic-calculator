@@ -48,10 +48,10 @@ def main(database, args):
     lock = multiprocessing.Lock()
     while True:
         # Check for 'q' input
-        if sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
-            input_str = sys.stdin.readline().strip()
-            if input_str == 'q':
-                break
+##        if sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
+##            input_str = sys.stdin.readline().strip()
+##            if input_str == 'q':
+##                break
         # Generate private key and address
         passphrase, private_key, public_key, address = generate_primary_key_and_address(args['wordcount'], args['coin'],args['verbose'], args['language'])
         lock.acquire()
