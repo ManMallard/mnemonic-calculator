@@ -10,6 +10,7 @@ import multiprocessing
 import sys
 from mnemonic import Mnemonic
 from bip_utils import Bip39MnemonicGenerator, Bip39SeedGenerator
+import binascii
 
 DATABASE = r'database test/11_13_2022/'
 
@@ -20,7 +21,7 @@ def int_to_hex(num, num_bytes):
 def generate_random_mnemonic(num_words=24, language='english'):
     """Generate a random mnemonic phrase."""
     mnemo = Mnemonic(language.upper())
-    strength = int(2 ^ (num_words / 3))
+    strength = int(2 ** (num_words / 3))
     mnemonic_words = mnemo.generate(256)
     return mnemonic_words
 
@@ -29,16 +30,16 @@ def generate_primary_key_and_address(wordcount=24, coin='BTC', verbose=0, langua
     mnemonic_phrase = generate_random_mnemonic(wordcount, language)
 ##    mnemonic = Bip39MnemonicGenerator(mnemonic_phrase, language)
     seed_bytes = Bip39SeedGenerator(mnemonic_phrase).Generate()
-    wallet = hdwallet.HDWallet.from_seed(seed_bytes)
-    coin_type_key = wallet.generate_coin_type(coin)
-    primary_key = coin_type_key.key
-    private_key_hex = int_to_hex(primary_key.secret, 32)
-    public_key_hex = primary_key.public_key().to_hex(compressed=True)
-    address = primary_key.address()
+    seed_hex = binascii.hexlify(seed_bytes).decode('utf-8')
+    wallet = hdwallet.HDWallet(symbol='BTC').from_seed(seed=seed_hex)
+    #coin_type_key = wallet.generate_coin_type(coin)
+    #primary_key = wallet.primary_key()
+    private_key = wallet.private_key()
+    public_key = wallet.public_key()
+    address = wallet.p2pkh_address()
     if verbose:
         print(address)
-    return mnemonic_phrase, private_key_hex, public_key_hex, address
-
+    return mnemonic_phrase, private_key, public_key, address
 def timer():
     """Measure the time it takes to generate a primary key and address."""
     start = time.time()
@@ -162,7 +163,7 @@ if __name__ == '__main__':
 
     print('database size: ' + str(len(database)))
     print('processes spawned: ' + str(args['cpu_count']))
-    print('Press q to stop')
+
     
     for cpu in range(args['cpu_count']):
         multiprocessing.Process(target = main, args = (database, args)).start()
