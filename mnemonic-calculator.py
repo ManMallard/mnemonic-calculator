@@ -12,7 +12,7 @@ from mnemonic import Mnemonic
 from bip_utils import Bip39MnemonicGenerator, Bip39SeedGenerator
 import binascii
 
-DATABASE = r'database test/11_13_2022/'
+DATABASE = r'database/11_13_2022/'
 
 def int_to_hex(num, num_bytes):
     """Convert an integer to its hexadecimal representation."""
@@ -63,13 +63,11 @@ def main(database, args):
                 with open(DATABASE + filename) as file:
                     if address in file.read():
                         print('Match!\n')
-                        with open('plutus.txt', 'a') as plutus:
-                            plutus.write('hex private key: ' + str(private_key_hex) + '\n' +
+                        with open('mnemonic.txt', 'a') as mnemonic:
+                            mnemonic.write('hex private key: ' + str(private_key_hex) + '\n' +
                                          'public key: ' + str(public_key_hex) + '\n' +
                                          'uncompressed address: ' + str(address) + '\n\n')
                         break
-                    else:
-                        print('No match\n')
 
 def print_help():
     """Print help information."""
