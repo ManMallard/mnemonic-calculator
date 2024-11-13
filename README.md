@@ -1,8 +1,8 @@
 # mnemonic-calculator
  Script that generates wallet addresses and their private keys from a given set of mnemonic.
-# Plutus Bitcoin Brute Forcer
+# Mnemonic Bitcoin Brute Forcer
 
-A Bitcoin wallet collider that brute forces random wallet addresses
+A Bitcoin wallet collider that brute forces random wallet addresses based on the BIP39 Mnemonic Wordset
 
 # Like This Project? Give It A Star
 
@@ -22,16 +22,16 @@ sudo apt-get install libgmp3-dev
 # Installation
 
 ```
-git clone https://github.com/Isaacdelly/Plutus.git plutus
+git clone https://github.com/ManMallard/mnemonic-calculator.git mnemonicalc
 ```
 ```
-cd plutus && pip3 install -r requirements.txt
+cd mnemonicalc && pip3 install -r requirements.txt
 ```
 
 # Quick Start
 
 ```
-python3 plutuspassphrase.py
+python3 mnemonic-calculator.py
 ```
 
 # Proof Of Concept
@@ -64,33 +64,31 @@ An offline database is used to find the balance of generated Bitcoin addresses. 
 
 This program has optional parameters to customize how it runs:
 
-__help__: `python3 plutus.py help` <br />
+__help__: `python3 mnemonic-calculator.py help` <br />
 Prints a short explanation of the parameters and how they work
 
-__time__: `python3 plutus.py time` <br />
+__time__: `python3 mnemonic-calculator.py time` <br />
 Brute forces a single address and takes a timestamp of how long it took - used for speed testing purposes
 
 __verbose__: 0 or 1 <br />
-`python3 plutus.py verbose=1`: When set to 1, then every bitcoin address that gets bruteforced will be printed to the terminal. This has the potential to slow the program down
+`python3 mnemonic-calculator.py verbose=1`: When set to 1, then every bitcoin address that gets bruteforced will be printed to the terminal. This has the potential to slow the program down
 
-`python3 plutus.py verbose=0`: When set to 0, the program will not print anything to the terminal and the bruteforcing will work silently. By default verbose is set to 0
+`python3 mnemonic-calculator.py verbose=0`: When set to 0, the program will not print anything to the terminal and the bruteforcing will work silently. By default verbose is set to 0
 
-__substring__: `python3 plutus.py substring=8`:
+__substring__: `python3 mnemonic-calculator.py substring=8`:
 To make the program memory efficient, the entire bitcoin address is not loaded from the database. Only the last <__substring__> characters are loaded. This significantly reduces the amount of RAM required to run the program. if you still get memory errors then try making this number smaller, by default it is set to 8. This opens us up to getting false positives (empty addresses mistaken as funded) with a probability of 1/(16^<__substring__>), however it does NOT leave us vulnerable to false negatives (funded addresses being mistaken as empty) so this is an acceptable compromise.
 
-__cpu_count__: `python3 plutus.py cpu_count=1`: number of cores to run concurrently. More cores = more resource usage but faster bruteforcing. Omit this parameter to run with the maximum number of cores
+__cpu_count__: `python3 mnemonic-calculator.py cpu_count=1`: number of cores to run concurrently. More cores = more resource usage but faster bruteforcing. Omit this parameter to run with the maximum number of cores
 
-dictionary: dictionary file, default bipdict.json in plutuspassphrase folder
-
-triedvalues: list of tried passphrases, default triedpassphrases.json in plutuspassphrase folder
+triedvalues: list of tried passphrases, default triedpassphrases.txt in mnemonicalc folder
 
 language: language to pick words from, default is random, and will choose a random language every time it generates a passphrase, possible languages are: "chinese_simplified", "spanish", "portuguese", "korean", "italian", "japanese", "french", "english", "czech", "chinese_traditional"
 
-By default the program runs using `python3 plutus.py verbose=0 substring=8 language='random'` if nothing is passed.
+By default the program runs using `python3 mnemonic-calculator.py verbose=0 substring=8 language='random'` if nothing is passed.
   
 # Expected Output
 
-If a wallet with a balance is found, then all necessary information about the wallet will be saved to the text file `plutus.txt`. An example is:
+If a wallet with a balance is found, then all necessary information about the wallet will be saved to the text file `addresses.txt`. An example is:
 
 >hex private key: 5A4F3F1CAB44848B2C2C515AE74E9CC487A9982C9DD695810230EA48B1DCEADD<br/>
 >WIF private key: 5JW4RCAXDbocFLK9bxqw5cbQwuSn86fpbmz2HhT9nvKMTh68hjm<br/>
