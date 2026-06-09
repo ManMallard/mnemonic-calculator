@@ -55,6 +55,8 @@ def main(database, args):
         with multiprocessing.Lock():
             with open('addresses.txt', 'a') as file:
                 file.write(passphrase + ', ' + address + '\n')
+        if args['max_size'] > 0 and os.path.getsize('addresses.txt') >= args['max_size']:
+            break
         if args['verbose']:
             print(address)
         if address[-args['substring']:] in database:
@@ -104,7 +106,8 @@ if __name__ == '__main__':
         'triedvalues': 'triedpassphrases.txt',
         'language': 'english',
         'wordcount': 24,
-        'coin': 'BTC'
+        'coin': 'BTC',
+        'max_size': 0,  # 0 = run forever; otherwise max addresses.txt size in bytes
     }
 
     for arg in sys.argv[1:]:
@@ -142,6 +145,16 @@ if __name__ == '__main__':
             args['wordcount'] = int(value)
         elif command == 'coin':
             args['coin'] = value
+        elif command == 'max_size':
+            val = value.upper()
+            if val.endswith('GB'):
+                args['max_size'] = int(val[:-2]) * 1024 ** 3
+            elif val.endswith('MB'):
+                args['max_size'] = int(val[:-2]) * 1024 ** 2
+            elif val.endswith('KB'):
+                args['max_size'] = int(val[:-2]) * 1024
+            else:
+                args['max_size'] = int(val)
         else:
             print('Invalid input:', command)
             print_help()
